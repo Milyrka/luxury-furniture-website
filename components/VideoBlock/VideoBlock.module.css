@@ -1,0 +1,181 @@
+/* ════════════════════════════════════════════════════════════════════════
+   VideoBlock — fixed stable structure.
+   Key fixes:
+   - .pinned is position:relative so absolute children anchor to it
+   - .video fills exactly 100% with no overflow/clip tricks
+   - no yPercent parallax (removed — was causing black gaps)
+   - GSAP pin controls positioning; no competing CSS positioning
+   ════════════════════════════════════════════════════════════════════════ */
+
+.sectionWrap {
+  position: relative;
+  width: 100%;
+  height: 340vh;
+  background: #000;   /* fills the scroll space behind the pin */
+  margin-top: -100vh;
+}
+
+/* The pinned panel — GSAP sets it to position:fixed during its pin range.
+   Must be position:relative initially so children (video, overlays) have
+   a correct containing block BEFORE GSAP takes over. */
+.pinned {
+  position: sticky;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: #000;
+  transform: translateZ(0);
+  contain: paint;
+}
+
+/* Video: true full-cover fill, no overflow bleed, no inset tricks.
+   scale(1.06) is set via GSAP inline, not here, so it stays controllable. */
+.video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform-origin: center center;
+  will-change: transform;
+}
+
+/* Gradient overlays anchored to .pinned */
+.gradTop {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 35%;
+  background: linear-gradient(to bottom, rgba(0,0,0,.65) 0%, transparent 100%);
+  z-index: 2;
+  pointer-events: none;
+}
+.gradBot {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 60%;
+  background: linear-gradient(to top,
+    rgba(0,0,0,.95) 0%,
+    rgba(0,0,0,.40) 55%,
+    transparent 100%);
+  z-index: 2;
+  pointer-events: none;
+}
+.grain {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  opacity: .022;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Editorial text column — bottom-left */
+.content {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: flex-end;
+  padding: 0 38px 100px;
+  pointer-events: none;
+}
+
+.eyebrow {
+  font-family: var(--font-saans);
+  font-weight: 380;
+  font-size: 12px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: #fff;
+  margin-bottom: 19px;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  opacity: 0;
+}
+.eyebrow::before {
+  content: '';
+  width: 20px;
+  height: 1px;
+  background: var(--color-amber-heat, #B8783A);
+  flex-shrink: 0;
+}
+
+.headline {
+  font-family: var(--font-saans);
+  font-weight: 300;
+  font-size: clamp(2rem, 3.8vw, 3.4rem);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  color: #fff;
+  margin-bottom: 19px;
+  max-width: 640px;
+  opacity: 0;
+}
+
+.body {
+  font-family: var(--font-saans);
+  font-weight: 380;
+  font-size: 16px;
+  line-height: 1.43;
+  letter-spacing: 0.8px;
+  color: rgba(255,255,255,.50);
+  max-width: 440px;
+  opacity: 0;
+}
+
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 27px;
+}
+.pill {
+  font-family: var(--font-saans);
+  font-weight: 380;
+  font-size: 12px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: #fff;
+  border-radius: 70px;
+  border: 1px solid #4d4d4d;
+  padding: 10px 19px;
+  opacity: 0;
+}
+
+/* Kinetic display word — ghost, top-right, anchored to .pinned */
+.displayWord {
+  position: absolute;
+  top: 60px;
+  right: 38px;
+  z-index: 9;
+  font-family: var(--font-saans);
+  font-weight: 300;
+  font-size: clamp(2.2rem, 7vw, 6rem);
+  line-height: 1;
+  letter-spacing: -0.025em;
+  color: rgba(255,255,255,.12);
+  text-transform: uppercase;
+  pointer-events: none;
+  user-select: none;
+  opacity: 0;
+}
+
+@media (max-width: 768px) {
+  .sectionWrap { height: 125svh; margin-top: 0; }
+  .pinned { position: relative; top: auto; height: 100svh; }
+  .content     { padding: 0 20px 60px; }
+  .displayWord { top: 80px; right: 20px; font-size: clamp(1.8rem, 12vw, 3rem); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sectionWrap { height: 100svh; }
+  .pinned { position: relative; top: auto; height: 100svh; opacity: 1 !important; }
+  .eyebrow, .headline, .body, .pill, .displayWord {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

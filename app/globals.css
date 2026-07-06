@@ -1,0 +1,161 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ════════════════════════════════════════════════════════════════════════
+   MASSIV — Editorial Dark Luxury Furniture System
+   Adapted from 21 TSI's editorial-cinematic grammar: black canvas, white
+   hairline UI, oversized whisper-weight type, full-bleed photography/video
+   carrying all color. Here the "crimson heat" role is replaced by warm
+   amber wood-light — the only chromatic note in the system, always
+   delivered by the material itself (timber grain, amber workshop light),
+   never as a CSS fill.
+   ════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ─── Core surfaces (from 21 TSI: black-void / paper-white / smoke) ──── */
+  --color-black-void:   #000000;
+  --color-paper-white:  #ffffff;
+  --color-smoke:        #4d4d4d;
+
+  /* ─── Material accent — replaces "crimson heat" ───────────────────────
+     This is the ONE chromatic note in the system. It must always be
+     carried by photography/video (timber tones, amber workshop light),
+     never applied as a flat UI background. Used only for the faintest
+     tints on hairlines/glows where warmth needs to read through black. */
+  --color-amber-heat:   #B8783A;
+  --color-amber-dim:    rgba(184, 120, 58, 0.35);
+
+  /* Legacy aliases kept so existing component code referencing --oak /
+     --cream / --graphite etc. continues to resolve, now mapped onto the
+     new dark system instead of the old light palette. */
+  --oak:        var(--color-amber-heat);
+  --oak-light:  #D4A06A;
+  --oak-dim:    var(--color-amber-dim);
+  --cream:      var(--color-black-void);
+  --warm-white: var(--color-black-void);
+  --beige:      #0a0a0a;
+  --linen:      var(--color-smoke);
+  --graphite:   var(--color-paper-white);
+  --mid:        rgba(255, 255, 255, 0.55);
+  --soft:       rgba(255, 255, 255, 0.35);
+
+  /* ─── Typography — Saans substitute: Inter, geometric, true 300 weight ─ */
+  --font-saans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: var(--font-saans);
+  --font-ui:      var(--font-saans);
+
+  /* ─── Type scale — non-linear: tight UI cluster, then explosive display ─ */
+  --text-caption:     12px;
+  --text-body-sm:     14px;
+  --text-body:        16px;
+  --text-subheading:  20px;
+  --text-heading-sm:  47px;
+  --text-heading:     79px;
+  --text-heading-lg:  106px;
+  --text-display:     130px;
+  --text-display-lg:  136px;
+  --text-display-xl:  245px;
+
+  /* ─── Spacing scale ────────────────────────────────────────────────── */
+  --spacing-10: 10px;  --spacing-15: 15px;  --spacing-20: 20px;
+  --spacing-23: 23px;  --spacing-30: 30px;  --spacing-38: 38px;
+  --spacing-60: 60px;  --spacing-108: 108px; --spacing-150: 150px;
+
+  /* ─── Radii ────────────────────────────────────────────────────────── */
+  --radius-body:     8px;
+  --radius-pill:     70px;
+  --radius-circular: 594px;
+
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+html { overflow-x: clip; scroll-behavior: auto; }
+
+body {
+  background: var(--color-black-void);
+  color: var(--color-paper-white);
+  font-family: var(--font-saans);
+  font-weight: 380;
+  line-height: 1.43;
+  letter-spacing: 0.8px;
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+}
+
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+
+::selection { background: var(--color-amber-dim); color: #fff; }
+
+button, a { outline-offset: 3px; }
+
+/* ─── Editorial UI primitives ──────────────────────────────────────────
+   Shared utility classes any component can reach for, matching the
+   21 TSI system: hairline rule, uppercase caption label, ghost pill. */
+
+.hairline {
+  height: 1px;
+  background: var(--color-paper-white);
+  border: none;
+}
+
+.caption-label {
+  font-family: var(--font-saans);
+  font-weight: 380;
+  font-size: var(--text-caption);
+  line-height: 1.3;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--color-paper-white);
+}
+
+.ghost-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-paper-white);
+  background: transparent;
+  padding: 10px 20px;
+  font-family: var(--font-saans);
+  font-weight: 380;
+  font-size: var(--text-caption);
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--color-paper-white);
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.4s ease, border-color 0.4s ease;
+}
+.ghost-pill:hover { opacity: 0.7; }
+
+.online-dot {
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--color-paper-white);
+  flex-shrink: 0;
+}
+
+/* ─── Cinematic section transitions (overlap crossfade, unchanged engine) ─
+   Dark video blocks (.sectionWrap inside VideoBlock/Hero/Final) bleed
+   into adjacent sections via the existing GSAP overlap fades — here the
+   gradient breath layer fades to black instead of warm-white, since the
+   whole site is now dark canvas throughout. */
+
+/* ─── GPU layer promotion for animated elements ───────────────────────── */
+video {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

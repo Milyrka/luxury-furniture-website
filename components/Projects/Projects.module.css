@@ -1,0 +1,126 @@
+/* ════════════════════════════════════════════════════════════════════════
+   Projects — real photography in editorial grid.
+   Cards overflow:hidden clips the Ken Burns zoom.
+   Dark tint overlay brings photos into the site's cinematic mood.
+   ════════════════════════════════════════════════════════════════════════ */
+
+.scene {
+  position: relative;
+  min-height: 185vh;
+  padding-bottom: 0;
+  background: #000;
+  margin-top: 0;
+  z-index: 5;
+}
+
+.section {
+  background: #000;
+  padding: 54px 38px 58px;
+  overflow: hidden;
+  transform-origin: center top;
+  min-height: 100vh;
+  position: sticky;
+  top: 0;
+}
+
+.header {
+  max-width: 1150px; margin: 0 auto 34px;
+  display: flex; align-items: flex-end;
+  justify-content: space-between; gap: 38px;
+}
+
+.eyebrow {
+  font-family: var(--font-saans); font-weight: 380;
+  font-size: 12px; letter-spacing: 0.6px; text-transform: uppercase;
+  color: #fff; margin-bottom: 20px;
+  display: flex; align-items: center; gap: 14px;
+}
+.eyebrow::before { content: ''; width: 20px; height: 1px; background: #B8783A; }
+
+.headline {
+  font-family: var(--font-saans); font-weight: 300;
+  font-size: clamp(1.9rem, 3.2vw, 3rem);
+  line-height: 1.15; letter-spacing: -0.025em;
+  color: #fff;
+}
+.sub {
+  font-family: var(--font-saans); font-weight: 380;
+  font-size: 14px; line-height: 1.38; letter-spacing: 0.7px;
+  color: rgba(255,255,255,.4); max-width: 320px; text-align: right;
+}
+
+/* Editorial 5:4 grid — big card left, two stacked right */
+.grid {
+  max-width: 1150px; margin: 0 auto;
+  display: grid;
+  grid-template-columns: 5fr 4fr;
+  grid-template-rows: 215px 215px;
+  gap: 2px;
+  background: #111;  /* thin seam between cards */
+}
+
+.card {
+  position: relative;
+  overflow: hidden;   /* clips Ken Burns scale on .cardImg */
+  background: #0a0a0a;
+  cursor: pointer;
+  transition: transform 0.9s cubic-bezier(.16,1,.3,1);
+}
+.card:hover { transform: translateY(-3px); }
+.card:first-child  { grid-row: 1 / 3; min-height: 430px; }
+.card:nth-child(2),
+.card:nth-child(3) { aspect-ratio: auto; }
+
+/* Photo container — fills card, Ken Burns driven by GSAP on this element */
+.cardImg {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+  filter: brightness(1.22) contrast(.92) saturate(.95);
+}
+
+/* Dark cinematic tint — warms and unifies the photos with the site mood.
+   Uses a multiply-ish dark layer: deep shadows, warmth retained midtones.
+   Stronger at edges, lighter at center so timber textures stay visible. */
+.cardTint {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 85% 85% at center, rgba(255,245,232,.07) 0%, rgba(0,0,0,.28) 100%),
+    linear-gradient(to bottom, rgba(0,0,0,.12) 0%, transparent 48%, transparent 68%, rgba(0,0,0,.38) 100%);
+}
+
+/* Label — always above tint */
+.cardLabel {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  z-index: 2;
+  padding: 28px 27px 26px;
+  background: linear-gradient(to top, rgba(0,0,0,.82) 0%, rgba(0,0,0,.2) 60%, transparent 100%);
+  transition: padding 0.6s cubic-bezier(.16,1,.3,1);
+}
+.card:hover .cardLabel { padding-bottom: 32px; }
+
+.cardNum {
+  font-family: var(--font-saans); font-weight: 380;
+  font-size: 12px; letter-spacing: 0.6px;
+  color: rgba(255,255,255,.38); margin-bottom: 7px;
+}
+.cardTitle {
+  font-family: var(--font-saans); font-weight: 300;
+  font-size: clamp(1.2rem, 1.8vw, 1.8rem);
+  letter-spacing: -0.02em;
+  color: #fff; line-height: 1.2;
+}
+
+@media(max-width: 900px) {
+  .scene { min-height: auto; padding-bottom: 0; margin-top: 0; }
+  .section { padding: 100px 20px; }
+  .section { position: relative; top: auto; }
+  .grid    { grid-template-columns: 1fr; grid-template-rows: auto; }
+  .card:first-child { min-height: 420px; grid-row: auto; }
+  .header  { flex-direction: column; align-items: flex-start; }
+  .sub     { text-align: left; }
+}
