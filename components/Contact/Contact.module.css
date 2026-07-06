@@ -143,8 +143,11 @@ a.infoValue:hover { color: var(--color-amber-heat); }
 
 @media(max-width:900px){
   .scene { min-height: auto; margin-top: 0; }
-  .inner { grid-template-columns: 1fr; gap: 60px; }
-  .section { padding: 100px 20px; }
+  .inner { grid-template-columns: minmax(0, 1fr); gap: 52px; }
+  .left, .right { min-width: 0; }
+  .body { width: 100%; max-width: 100%; overflow-wrap: anywhere; }
+  .infoValue { max-width: 100%; overflow-wrap: anywhere; word-break: break-word; }
+  .section { padding: 72px 20px 64px; }
   .section { position: relative; top: auto; min-height: auto; }
-  .footer { flex-direction: column; gap: 16px; text-align: center; }
+  .footer { margin-top: 68px; flex-direction: column; gap: 16px; text-align: center; }
 }

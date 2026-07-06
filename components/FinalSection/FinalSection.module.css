@@ -83,8 +83,11 @@
 .cta:hover .arrow { width: 24px; }
 
 @media(max-width:768px){
-  .sectionWrap{ height: 125svh; margin-top: 0; }
+  .sectionWrap{ height: 100svh; margin-top: 0; }
   .pinned { position: relative; top: auto; height: 100svh; }
+  .content { padding: 36px 20px; }
+  .rule { margin-bottom: 30px; }
+  .headline { margin-bottom: 34px; }
 }
 @media(prefers-reduced-motion:reduce){
   .sectionWrap { height: 100svh; }

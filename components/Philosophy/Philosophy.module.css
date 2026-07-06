@@ -88,7 +88,8 @@
 
 @media(max-width:900px){
   .scene { min-height: auto; margin-top: 0; }
-  .section{ padding:108px 20px }
+  .section{ padding:72px 20px 56px; min-height: auto; }
   .section { position: relative; top: auto; }
-  .inner{ grid-template-columns:1fr; gap:60px }
+  .inner{ grid-template-columns:1fr; gap:40px }
+  .divider { margin: 36px 0; }
 }
